@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSCLELOGIC | {% block title %}{{title}}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar"> 
+            <div class="logo">MUSCLE<span>LOGIC</span><a href="{% url 'form_konsultasi' %}"><a/></div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'form_konsultasi' %}">Konsultasi</a></li>
+            <li><a href="{% url 'admin:index' %}" class="btn-login">admin</a></li>
+        </ul>
+    </nav>
+
+      <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+<footer class="main-footer">
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <div class="logo">MUSCLE<span>LOGIC</span></div>
+            <p>Sistem pakar berbasis kecerdasan buatan untuk optimalisasi latihan beban dan pembentukan otot yang presisi.</p>
+        </div>
+
+        <div class="footer-links">
+            <h4>Sistem</h4>
+            <ul>
+                <li><a href="{% url 'home' %}">Beranda</a></li>
+                <li><a href="{% url 'form_konsultasi' %}">Mulai Konsultasi</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h4>Hubungi Pengembang</h4>
+            <p>Laboratorium Komputer, Fakultas Teknik</p>
+            <p>Email: admin@musclelogic.id</p>
+            <p>Telp: +62 800-3000-7000</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 MuscleLogic. Skripsi - Teknik Informatika.</p>
+        <div class="socials">
+            <a href="#">FB</a>
+            <a href="#">IG</a>
+            <a href="#">YT</a>
+        </div>
+    </div>
+</footer>
+</html>
+

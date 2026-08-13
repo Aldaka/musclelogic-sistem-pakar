@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+
+
+
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>
+                <span class="line line-1">OPTIMASI</span> <br> 
+                <span class="outline line-2">HIPERTROFI</span> <br> 
+                <span class="line line-3">OTOT</span>
+            </h1>
+            <p>Dapatkan rekomendasi program latihan muscle building yang dipersonalisasi menggunakan mesin inferensi sistem pakar berdasarkan tipe tubuh, target otot, dan level pengalaman Anda.</p>
+            <a href="{% url 'form_konsultasi' %}">
+                <button a class="btn-main">Mulai Konsultasi</button>
+            </a>
+        </div>
+    </header>
+
+
+    <section class="testimonials">
+    <h2>METODE LATIHAN TERBAIK</h2>
+    <div class="card-container">
+        <div class="card">
+            <h3>Progressive Overload</h3>
+            <p>Sistem merancang program yang memastikan adanya peningkatan beban secara berkala untuk merangsang otot.</p>
+        </div>
+        <div class="card">
+            <h3>Optimal Volume</h3>
+            <p>Set dan repetisi dihitung secara presisi berdasarkan level pengalaman Anda agar tidak terjadi overtraining.</p>
+        </div>
+        <div class="card">
+            <h3>Compound Movement</h3>
+            <p>Rekomendasi diprioritaskan pada gerakan yang melibatkan banyak sendi untuk efisiensi pertumbuhan otot.</p>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}

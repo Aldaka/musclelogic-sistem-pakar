@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="result-page-wrapper">
+    <div class="container">
+        <h1>Hasil Konsultasi</h1>
+
+        {% if hasil_inferensi.status == "Berhasil" %}
+            <div class="success">
+                {{ hasil_inferensi.pesan }}
+            </div>
+        {% else %}
+            <div class="failed">
+                {{ hasil_inferensi.pesan }}
+            </div>
+        {% endif %}
+
+        <h3>Data Input User</h3>
+        <ul>
+            <li>Tinggi Badan: {{ data.tinggi_badan }} cm</li>
+            <li>Berat Badan: {{ data.berat_badan }} kg</li>
+            <li>Pengalaman Latihan: {{ display_data.pengalaman_latihan }}</li>
+            <li>Pemahaman Teknik Dasar: {{ display_data.teknik_dasar }}</li>
+            <li>Frekuensi Latihan Sebelumnya: {{ display_data.frekuensi_sebelumnya }}</li>
+            <li>Tujuan Latihan: {{ display_data.goal }}</li>
+            <li>Prioritas Latihan: {{ display_data.focus }}</li>
+            <li>Tempat Latihan: {{ display_data.place }}</li>
+            <li>Peralatan Rumah: {{ display_data.equip_home|default:"-" }}</li>
+            <li>Hari per Minggu: {{ display_data.days_per_week }}</li>
+            <li>Durasi per Sesi: {{ display_data.time_per_session }}</li>
+            <li>Cedera: {{ display_data.injury }}</li>
+            <li>Area Cedera: {{ data.injury_area|default:"-" }}</li>
+        </ul>
+
+        <h3>Hasil Perhitungan BMI</h3>
+        <ul>
+            <li>Nilai BMI: {{ bmi }}</li>
+            <li>Kategori BMI: {{ bmi_cat }}</li>
+        </ul>
+    <div>
+        <h3>Ringkasan Inferensi Forward Chaining</h3>
+        <div class="box">
+            <ul>
+                <li>
+                    <strong>RS15 - Safety Cedera:</strong>
+                    {{ hasil_inferensi.rs15.rule_id }} →
+                    {{ hasil_inferensi.rs15.batasan_gerakan }}
+                </li>
+
+                <li>
+                    <strong>RS5 - Kondisi Tubuh:</strong>
+                    {{ hasil_inferensi.rs5.rule_id }} →
+                    BMI {{ hasil_inferensi.rs5.bmi }},
+                    {{ hasil_inferensi.rs5.kondisi_tubuh }}
+                </li>
+
+                <li>
+                    <strong>RS6 - Level Pemula:</strong>
+                    {{ hasil_inferensi.rs6.rule_id }} →
+                    {{ hasil_inferensi.rs6.level }}
+                </li>
+
+                <li>
+                    <strong>RS3 - Intensitas Awal:</strong>
+                    {{ hasil_inferensi.rs3.rule_id }} →
+                    {{ hasil_inferensi.rs3.intensitas_awal }}
+                </li>
+
+                <li>
+                    <strong>RS4 - Penyesuaian Program:</strong>
+                    {{ hasil_inferensi.rs4.rule_id }} →
+                    {{ hasil_inferensi.rs4.penyesuaian }}
+                </li>
+
+                {% if hasil_inferensi.rs7 %}
+                <li>
+                    <strong>RS7 - Penyesuaian Peralatan:</strong>
+                    {{ hasil_inferensi.rs7.rule_id }} →
+                    {{ hasil_inferensi.rs7.label_equip_home }}
+                </li>
+                {% endif %}
+
+                <li>
+                    <strong>RS1 - Rekomendasi Akhir:</strong>
+                    {{ hasil_inferensi.rs1.rule_id }} →
+                    Paket {{ hasil_inferensi.rs1.paket }}
+                </li>
+            </ul>
+        </div>
+    </div>    
+    {% comment %} <div>
+        <h3>Jejak Inferensi Forward Chaining</h3>
+
+        <div class="box">
+            <strong>RS15 - Safety Cedera</strong>
+            <ul>
+                <li>Rule Aktif: {{ hasil_inferensi.rs15.rule_id }}</li>
+                <li>Riwayat Cedera: {{ hasil_inferensi.rs15.riwayat_cedera }}</li>
+                <li>Batasan Gerakan: {{ hasil_inferensi.rs15.batasan_gerakan }}</li>
+                <li>Keterangan: {{ hasil_inferensi.rs15.keterangan }}</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <strong>RS5 - Kondisi Tubuh</strong>
+            <ul>
+                <li>Rule Aktif: {{ hasil_inferensi.rs5.rule_id }}</li>
+                <li>BMI: {{ hasil_inferensi.rs5.bmi }}</li>
+                <li>Kondisi Tubuh: {{ hasil_inferensi.rs5.kondisi_tubuh }}</li>
+                <li>Keterangan: {{ hasil_inferensi.rs5.keterangan }}</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <strong>RS6 - Level Pemula</strong>
+            <ul>
+                <li>Rule Aktif: {{ hasil_inferensi.rs6.rule_id }}</li>
+                <li>Level: {{ hasil_inferensi.rs6.level }}</li>
+                <li>Keterangan: {{ hasil_inferensi.rs6.keterangan }}</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <strong>RS3 - Intensitas Awal</strong>
+            <ul>
+                <li>Rule Aktif: {{ hasil_inferensi.rs3.rule_id }}</li>
+                <li>Intensitas Awal: {{ hasil_inferensi.rs3.intensitas_awal }}</li>
+                <li>Keterangan: {{ hasil_inferensi.rs3.keterangan }}</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <strong>RS4 - Penyesuaian Program</strong>
+            <ul>
+                <li>Rule Aktif: {{ hasil_inferensi.rs4.rule_id }}</li>
+                <li>Penyesuaian: {{ hasil_inferensi.rs4.penyesuaian }}</li>
+                <li>Split: {{ hasil_inferensi.rs4.split }}</li>
+                <li>Mode Latihan: {{ hasil_inferensi.rs4.mode_latihan }}</li>
+                <li>Keterangan: {{ hasil_inferensi.rs4.keterangan }}</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <strong>RS1 - Rekomendasi Akhir</strong>
+            <ul>
+                <li>Rule Aktif: {{ hasil_inferensi.rs1.rule_id }}</li>
+                <li>Paket: {{ hasil_inferensi.rs1.paket }}</li>
+                <li>Intensitas Final: {{ hasil_inferensi.rs1.intensitas_final }}</li>
+                <li>Alasan Rule: {{ hasil_inferensi.rs1.alasan_rule }}</li>
+            </ul>
+        </div>
+    </div> {% endcomment %}
+
+        {% comment %} <h3>Rekomendasi Program Latihan</h3>
+
+        {% if hasil_inferensi.paket %}
+            <div class="box">
+                <ul>
+                    <li>Paket: {{ hasil_inferensi.paket.paket }}</li>
+                    <li>Nama Program: {{ hasil_inferensi.paket.nama_program }}</li>
+                    <li>Fokus Keamanan: {{ hasil_inferensi.paket.fokus_keamanan }}</li>
+                    <li>Rekomendasi Gerakan: {{ hasil_inferensi.paket.rekomendasi_gerakan }}</li>
+                    <li>Larangan: {{ hasil_inferensi.paket.larangan }}</li>
+                    <li>Catatan: {{ hasil_inferensi.paket.catatan }}</li>
+                </ul>
+            </div>
+        {% else %}
+            <p>Detail paket latihan tidak ditemukan.</p>
+        {% endif %} {% endcomment %}
+
+
+        <h3>Rekomendasi Program Latihan</h3>
+
+        {% if hasil_inferensi.paket %}
+            <div class="program-card">
+
+                <div class="program-header">
+                    <span class="program-badge">Paket {{ hasil_inferensi.paket.paket }}</span>
+                    <h2>{{ hasil_inferensi.paket.nama_program }}</h2>
+                    <p>{{ hasil_inferensi.paket.fokus_keamanan }}</p>
+                </div>
+
+                <div class="program-info-grid">
+                    <div class="info-item">
+                        <span>Frekuensi</span>
+                        <strong>{{ hasil_inferensi.paket.frekuensi_minggu }}</strong>
+                    </div>
+
+                    <div class="info-item">
+                        <span>Durasi per Sesi</span>
+                        <strong>{{ hasil_inferensi.paket.durasi_sesi }}</strong>
+                    </div>
+
+                    <div class="info-item">
+                        <span>Istirahat</span>
+                        <strong>{{ hasil_inferensi.paket.istirahat }}</strong>
+                    </div>
+                </div>
+
+                <div class="program-section">
+                    <h4>Program Latihan</h4>
+                    <div class="program-text">
+                        {{ hasil_inferensi.paket.rekomendasi_gerakan|linebreaksbr }}
+                    </div>
+                </div>
+
+                <div class="program-section">
+                    <h4>Set dan Repetisi</h4>
+                    <div class="program-text">
+                        {{ hasil_inferensi.paket.set_rep|linebreaksbr }}
+                    </div>
+                </div>
+
+                <div class="program-section warning-section">
+                    <h4>Larangan</h4>
+                    <p>{{ hasil_inferensi.paket.larangan }}</p>
+                </div>
+
+                <div class="program-section">
+                    <h4>Catatan</h4>
+                    <p>{{ hasil_inferensi.paket.catatan }}</p>
+                </div>
+
+            </div>
+        {% else %}
+            <p>Detail paket latihan tidak ditemukan.</p>
+        {% endif %}
+
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="/konsultasi/" class="btn-back">Kembali ke Form</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* CSS UNTUK TEMA MUSCLELOGIC */
+    .result-page-wrapper {
+        background-color: #0a0a0a;
+        min-height: 100vh;
+        padding: 120px 20px 60px;
+        color: #ffffff;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background: #111111 !important;
+        padding: 40px;
+        border: 1px solid #222222;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #ffffff;
+        margin-bottom: 30px;
+    }
+
+    h3 {
+        margin-top: 40px;
+        color: #ff3e3e;
+        text-transform: uppercase;
+        font-style: italic;
+        border-bottom: 2px solid #ff3e3e;
+        padding-bottom: 10px;
+        font-weight: 800;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    ul li {
+        padding: 10px 0;
+        border-bottom: 1px solid #222;
+        color: #cccccc;
+        font-size: 0.95rem;
+    }
+
+    .box {
+        background: #1a1a1a !important;
+        border: 1px solid #333 !important;
+        padding: 20px;
+        margin-top: 20px;
+        border-left: 4px solid #ff3e3e;
+    }
+
+    .box strong {
+        color: #ff3e3e;
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+    }
+
+    .success {
+        background: rgba(46, 204, 113, 0.1) !important;
+        color: #2ecc71 !important;
+        border: 1px solid #2ecc71;
+        padding: 15px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .failed {
+        background: rgba(231, 76, 60, 0.1) !important;
+        color: #e74c3c !important;
+        border: 1px solid #e74c3c;
+        padding: 15px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 15px 35px;
+        background: #ff3e3e;
+        color: white;
+        text-decoration: none;
+        font-weight: 900;
+        text-transform: uppercase;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+        transition: 0.3s;
+    }
+
+    .btn-back:hover {
+        background: white;
+        color: #ff3e3e;
+    }
+
+    .program-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-left: 5px solid #ff3e3e;
+    padding: 28px;
+    margin-top: 20px;
+}
+
+.program-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+}
+
+.program-badge {
+    display: inline-block;
+    background: #ff3e3e;
+    color: #ffffff;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.program-header h2 {
+    color: #ffffff;
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
+.program-header p {
+    color: #cccccc;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.program-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 22px 0;
+}
+
+.info-item {
+    background: #111111;
+    border: 1px solid #333;
+    padding: 16px;
+}
+
+.info-item span {
+    display: block;
+    color: #999999;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.info-item strong {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.program-section {
+    margin-top: 26px;
+}
+
+.program-section h4 {
+    color: #ff3e3e;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 900;
+}
+
+.program-section p {
+    color: #cccccc;
+    line-height: 1.8;
+}
+
+.program-text {
+    background: #111111;
+    border: 1px solid #333;
+    padding: 18px;
+    color: #cccccc;
+    line-height: 1.9;
+    white-space: pre-line;
+}
+
+.warning-section {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+@media (max-width: 700px) {
+    .program-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock content %}

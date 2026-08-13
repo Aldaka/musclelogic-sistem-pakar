@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="consultation-wrapper">
+    <div class="form-container">
+        <div class="form-header">
+            <h1>ANALISIS <span class="highlight">FISIK</span></h1>
+            <p class="subtitle">Silakan lengkapi data di bawah untuk inferensi sistem pakar.</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <h3 class="section-title">Data Tubuh</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.tinggi_badan.label_tag }}
+                    {{ form.tinggi_badan }}
+                    {{ form.tinggi_badan.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.berat_badan.label_tag }}
+                    {{ form.berat_badan }}
+                    {{ form.berat_badan.errors }}
+                </div>
+            </div>
+
+            <h3 class="section-title">Pengalaman Latihan</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.pengalaman_latihan.label_tag }}
+                    {{ form.pengalaman_latihan }}
+                    {{ form.pengalaman_latihan.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.teknik_dasar.label_tag }}
+                    {{ form.teknik_dasar }}
+                    {{ form.teknik_dasar.errors }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form.frekuensi_sebelumnya.label_tag }}
+                    {{ form.frekuensi_sebelumnya }}
+                    {{ form.frekuensi_sebelumnya.errors }}
+                </div>
+            </div>
+
+            <h3 class="section-title">Tujuan dan Rencana Latihan</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.goal.label_tag }}
+                    {{ form.goal }}
+                    {{ form.goal.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.focus.label_tag }}
+                    {{ form.focus }}
+                    {{ form.focus.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.place.label_tag }}
+                    {{ form.place }}
+                    {{ form.place.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.equip_home.label_tag }}
+                    {{ form.equip_home }}
+                    {{ form.equip_home.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.days_per_week.label_tag }}
+                    {{ form.days_per_week }}
+                    {{ form.days_per_week.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.time_per_session.label_tag }}
+                    {{ form.time_per_session }}
+                    {{ form.time_per_session.errors }}
+                </div>
+            </div>
+
+            <h3 class="section-title">Riwayat Cedera</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.injury.label_tag }}
+                    {{ form.injury }}
+                    {{ form.injury.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.injury_area.label_tag }}
+                    {{ form.injury_area }}
+                    {{ form.injury_area.errors }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Proses Konsultasi</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Mengatur halaman agar sesuai tema gelap */
+    .consultation-wrapper {
+        background-color: #0a0a0a;
+        min-height: 100vh;
+        padding: 120px 10% 60px;
+        color: #fff;
+    }
+
+    .form-container {
+        background: #111;
+        padding: 50px;
+        border-radius: 5px;
+        border: 1px solid #222;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .form-header { text-align: center; margin-bottom: 40px; }
+    .form-header h1 { font-weight: 900; font-size: 2.5rem; }
+    .highlight { color: #ff3e3e; }
+    .subtitle { color: #666; font-size: 0.9rem; margin-top: 10px; }
+
+    /* Mengatur Grid sesuai class yang ada di HTML kamu */
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .form-group { display: flex; flex-direction: column; }
+    .full-width { grid-column: 1 / -1; }
+
+    /* Label Styling */
+    .form-group label {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+        color: #888;
+    }
+
+    /* Target Otomatis ke Input Django */
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
+        background: #1a1a1a !important;
+        border: 1px solid #333 !important;
+        color: #fff !important;
+        padding: 12px !important;
+        border-radius: 2px !important;
+        transition: 0.3s;
+    }
+
+    .form-group input:focus { border-color: #ff3e3e !important; outline: none; }
+
+    .section-title {
+        color: #ff3e3e;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-style: italic;
+        border-bottom: 2px solid #222;
+        padding-bottom: 10px;
+        margin: 40px 0 20px;
+    }
+
+    /* Button Styling */
+    .btn-submit {
+        width: 100%;
+        padding: 20px;
+        background: #ff3e3e;
+        color: #fff;
+        border: none;
+        font-weight: 900;
+        text-transform: uppercase;
+        cursor: pointer;
+        clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+        margin-top: 30px;
+        transition: 0.3s;
+    }
+
+    .btn-submit:hover { background: #fff; color: #ff3e3e; }
+
+    .errorlist { color: #ff3e3e; list-style: none; font-size: 0.8rem; margin-top: 5px; }
+</style>
+{% endblock content %}
